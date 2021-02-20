@@ -1,7 +1,3 @@
-"""
-CSC110 Final Project by Ian Lavine, Ayush Sahi, Prithee Roy, and Jeremy Wong
-"""
-
 # ImageTk and Image allow us to use custom images in tkinter windows
 from typing import Dict, List
 from tkinter import *
@@ -11,6 +7,9 @@ from PIL import ImageTk, Image
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
+
+cwd = Path.cwd()
 
 weeks_in_a_year = 52
 grams_in_a_kilo = 1000
@@ -40,15 +39,12 @@ emissions_per_serving_of_animal = {x: emissions_per_animal[x] * serving_size_per
 class Country:
     """
     The country the user is located in.
-
     Attributes:
         - name: name of the country
         - average_consumption: the average meat consumption per year per person
         by meat type in this country
-
     Representation Invariants:
         - name in proper_country_data
-
     Sample Usage:
     >>> Canada = Country('Canada', {'Beef' :18, 'Pork':24, 'Lamb': 1, 'Poultry': 39})
     """
@@ -62,7 +58,7 @@ class Country:
 
 
 country_data = pd.read_csv(
-    "/Users/ayushsahi/Projects/meat_monitor/percapita.csv")
+    f'{cwd}/assets/percapita.csv')
 proper_country_data = {
     country_data.loc[x, 'Entity']: [country_data.loc
                                     [x, 'Bovine meat food supply quantity '
@@ -97,7 +93,6 @@ for country in proper_country_data:
 class Animal:
     """
     A type of meat the user eats weekly.
-
     Attributes:
         - name: the name of the type of meat
         - location: the country the user resides in
@@ -117,7 +112,6 @@ class Animal:
         consumer's weekly consumption of this meat type
         - emission_reduction_percentage: the percentage of CO2 emissions reduced between the
         orginal and new consumer's weekly consumption of this meat type
-
     Sample Usage:
     >>> Beef = Animal('Beef', 'Canada', 15.0)
     >>> Beef.find_stats
@@ -144,7 +138,6 @@ class Animal:
         """
         Initialize a new meat type that the user consumes with a given name, the user's country,
         and its yearly consumption of that meat.
-
         Preconditions:
             - name in emissions_per_animal
         """
@@ -184,7 +177,6 @@ class Animal:
 class User:
     """
     A consumer of Meat Monitor.
-
     Attributes:
         - name: name of the user
         - location: the country the user is located in
@@ -203,14 +195,12 @@ class User:
         compared to his or her original meat consumption.
         - emission_reduction_percentage: the percentage of total CO2 emissions reduced in the
         user's goal meat consumption compared to his or her original meat consumption.
-
     Sample Usage:
     >>> Jeremy = User('Jeremy', 'Canada')
     >>> Jeremy.create_animal_classes([2, 3, 5, 7])
     >>> Jeremy.find_stats()
     >>> Jeremy.total_emissions
     240808.0
-
     """
     name: str
     location: Country
@@ -230,7 +220,6 @@ class User:
     def __init__(self, name, location) -> None:
         """
         Initialize a new user with a given name and country.
-
         Preconditions:
             - location in countries
         """
@@ -314,7 +303,7 @@ def inputs() -> None:
 
     global graphic
     png2 = Image.open(
-        '/Users/ayushsahi/Projects/meat_monitor/splash3.png')
+        f'{cwd}/assets/splash3.png')
     resized_png2 = png2.resize((300, 150), Image.ANTIALIAS)
     graphic = ImageTk.PhotoImage(resized_png2)
     graphic_label1 = Label(frame, image=graphic, background='lavender')
@@ -444,7 +433,7 @@ def inputs() -> None:
 
         global graphic2
         png3 = Image.open(
-            '/Users/ayushsahi/Projects/meat_monitor/splash3.png')
+            f'{cwd}/assets/splash3.png')
         resized_png3 = png3.resize((300, 150), Image.ANTIALIAS)
         graphic2 = ImageTk.PhotoImage(resized_png3)
         graphic_label2 = Label(frame1, image=graphic2, background='lavender')
@@ -556,7 +545,7 @@ def inputs() -> None:
 
                 global graphic3
                 png4 = Image.open(
-                    '/Users/ayushsahi/Projects/meat_monitor/splash3.png')
+                    f'{cwd}/assets/splash3.png')
                 resized_png4 = png4.resize((300, 150), Image.ANTIALIAS)
                 graphic3 = ImageTk.PhotoImage(resized_png4)
                 graphic_label3 = Label(frame2, image=graphic3, background='lavender')
@@ -816,7 +805,7 @@ splash_root.geometry(f'{800}x{600}+{splash_x}+{splash_y}')
 splash_root.configure(background='lavender')
 splash_root.after(6000, inputs)
 
-png1 = Image.open('/Users/ayushsahi/Projects/meat_monitor/splash2.png')
+png1 = Image.open(f'{cwd}/assets/splash3.png')
 resized_png1 = png1.resize((600, 300), Image.ANTIALIAS)
 splash_logo = ImageTk.PhotoImage(resized_png1)
 
@@ -824,18 +813,3 @@ logo_label1 = Label(image=splash_logo, background='lavender')
 logo_label1.pack(pady=100)
 
 mainloop()
-
-# if __name__ == '__main__':
-#     import python_ta
-#
-#     python_ta.check_all(config={
-#         'extra-imports': ['python_ta.contracts'],
-#         'allowed-io': ['run_example_break'],
-#         'max-line-length': 100,
-#         'disable': ['R1705', 'C0200']
-#     })
-#
-#     python_ta.contracts.check_all_contracts()
-#     import doctest
-#
-#     doctest.testmod()
